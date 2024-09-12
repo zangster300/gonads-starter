@@ -1,0 +1,57 @@
+package components
+
+import "gonad-starter/views/layouts"
+
+type CounterStore struct {
+	Global uint32 `json:"global"`
+	User   uint32 `json:"user"`
+}
+
+templ CounterButtons() {
+	<div class="flex justify-around gap-4">
+		<button
+			class="btn btn-info"
+			data-on-click="$$post('/counter/increment/global')"
+		>
+			Increment Global
+		</button>
+		<button
+			class="btn btn-success"
+			data-on-click="$$post('/counter/increment/user')"
+		>
+			Increment User
+		</button>
+	</div>
+}
+
+templ CounterCounts() {
+	<div class="flex justify-around gap-4">
+		<div class="flex flex-col items-center gap-1">
+			<div class="text-lg font-bold">Global</div>
+			<div class="text-2xl" data-text="$global"></div>
+		</div>
+		<div class="flex flex-col items-center gap-1">
+			<div class="text-lg font-bold">User</div>
+			<div class="text-2xl" data-text="$user"></div>
+		</div>
+	</div>
+}
+
+templ Counter(store CounterStore) {
+	<div
+		id="container"
+		data-store={ templ.JSONString(store) }
+		class="flex flex-col gap-4"
+	>
+		@CounterButtons()
+		@CounterCounts()
+	</div>
+}
+
+templ CounterInitial() {
+	@layouts.Base("Counter Example") {
+		<article class="prose mx-auto m-2">
+			<div id="container" data-on-load="$$get('/counter/data')"></div>
+		</article>
+	}
+}

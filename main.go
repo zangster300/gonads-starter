@@ -1,0 +1,68 @@
+package main
+
+import (
+	"context"
+	"fmt"
+	"gonad-starter/handlers"
+	"log/slog"
+	"net/http"
+	"os"
+	"os/signal"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"golang.org/x/sync/errgroup"
+)
+
+func main() {
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	logger.Info("Starting Server")
+	defer logger.Info("Stopping Server")
+
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer stop()
+
+	if err := run(ctx, logger); err != nil {
+		logger.Error("Error running server", slog.Any("err", err))
+		os.Exit(1)
+	}
+}
+
+func run(ctx context.Context, logger *slog.Logger) error {
+	g, ctx := errgroup.WithContext(ctx)
+
+	g.Go(startServer(ctx, logger, 8080))
+
+	if err := g.Wait(); err != nil {
+		return fmt.Errorf("error running server: %w", err)
+	}
+
+	return nil
+}
+
+func startServer(ctx context.Context, logger *slog.Logger, port int) func() error {
+	return func() error {
+		router := chi.NewMux()
+
+		router.Use(
+			middleware.Logger,
+			middleware.Recoverer,
+		)
+
+		router.Handle("/*", static())
+
+		handlers.SetupRoutes(logger, router)
+
+		srv := &http.Server{
+			Addr:    fmt.Sprintf("localhost:%d", port),
+			Handler: router,
+		}
+
+		go func() {
+			<-ctx.Done()
+			srv.Shutdown(context.Background())
+		}()
+
+		return srv.ListenAndServe()
+	}
+}
