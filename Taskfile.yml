@@ -1,0 +1,56 @@
+version: "3"
+
+tasks:
+  live:templ:
+    cmds:
+      - templ generate --watch --proxy="http://localhost:8080" --open-browser=false -v
+
+  live:styles:
+    cmds:
+      - pnpx tailwindcss -c tailwind.config.js -i views/styles/styles.css -o static/index.css --watch
+
+  live:esbuild:
+    cmds:
+      - pnpx esbuild views/ts/index.ts --bundle --outdir=static/ --watch
+
+  live:server:
+    cmds:
+      - |
+        go run github.com/air-verse/air@v1.52.3 \
+        --build.cmd "go build -tags dev -o tmp/bin/main" \
+        --build.bin "tmp/bin/main" \
+        --build.delay "20" \
+        --build.exclude_dir "node_modules,data,public" \
+        --build.include_ext "go" \
+        --build.stop_on_error "false" \
+        --misc.clean_on_exit true
+
+  live:sync_static:
+    cmds:
+      - |
+        go run github.com/air-verse/air@v1.52.3 \
+        --build.cmd "templ generate --notify-proxy" \
+        --build.bin "true" \
+        --build.delay "100" \
+        --build.exclude_dir "" \
+        --build.include_dir "static" \
+        --build.include_ext "js,css"
+
+  live:
+    deps:
+      - live:templ
+      - live:server
+      - live:styles
+      - live:esbuild
+      - live:sync_static
+    parallel: true
+
+  build:
+    cmds:
+      - go build -o bin/main .
+
+  run:
+    cmds:
+      - ./bin/main
+    deps:
+      - build

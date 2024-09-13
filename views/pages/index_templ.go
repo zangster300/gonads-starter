@@ -43,7 +43,7 @@ func Index(title string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 1)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-col w-full min-h-screen bg-base-200\"><div id=\"todos-container\" data-on-load=\"$$get(&#39;/api/todos&#39;)\"><p>Todos Example</p><p>If you are seeing this message, please clear your cookies and refresh the page.</p><p>We recently updated the site and the old cookies are causing issues.</p></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

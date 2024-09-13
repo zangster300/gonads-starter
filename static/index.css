@@ -3369,10 +3369,6 @@ input.tab:checked + .tab-content,
   position: relative;
 }
 
-.float-right {
-  float: right;
-}
-
 .m-2 {
   margin: 0.5rem;
 }
@@ -3392,11 +3388,6 @@ input.tab:checked + .tab-content,
   margin-bottom: 0.5rem;
 }
 
-.mx-60 {
-  margin-left: 15rem;
-  margin-right: 15rem;
-}
-
 .flex {
   display: flex;
 }
@@ -3409,48 +3400,8 @@ input.tab:checked + .tab-content,
   height: 100vh;
 }
 
-.h-1\/2 {
-  height: 50%;
-}
-
 .max-h-\[calc\(100vh-400px\)\] {
   max-height: calc(100vh - 400px);
-}
-
-.max-h-\[calc\(100vh-10vh\)\] {
-  max-height: calc(100vh - 10vh);
-}
-
-.max-h-96 {
-  max-height: 24rem;
-}
-
-.max-h-\[calc\(100vh-800px\)\] {
-  max-height: calc(100vh - 800px);
-}
-
-.max-h-\[calc\(100vh-600px\)\] {
-  max-height: calc(100vh - 600px);
-}
-
-.max-h-\[calc\(100vh-650px\)\] {
-  max-height: calc(100vh - 650px);
-}
-
-.max-h-\[calc\(100vh-700px\)\] {
-  max-height: calc(100vh - 700px);
-}
-
-.max-h-\[calc\(100vh\)\] {
-  max-height: calc(100vh);
-}
-
-.max-h-\[calc\(100vh-100px\)\] {
-  max-height: calc(100vh - 100px);
-}
-
-.max-h-\[calc\(100vh-500px\)\] {
-  max-height: calc(100vh - 500px);
 }
 
 .min-h-screen {
@@ -3530,10 +3481,6 @@ input.tab:checked + .tab-content,
   border-color: var(--fallback-p,oklch(var(--p)/var(--tw-divide-opacity)));
 }
 
-.overflow-auto {
-  overflow: auto;
-}
-
 .overflow-scroll {
   overflow: scroll;
 }
@@ -3550,29 +3497,19 @@ input.tab:checked + .tab-content,
   border-style: solid;
 }
 
-.border-green-500 {
-  --tw-border-opacity: 1;
-  border-color: rgb(34 197 94 / var(--tw-border-opacity));
-}
-
 .border-primary {
   --tw-border-opacity: 1;
   border-color: var(--fallback-p,oklch(var(--p)/var(--tw-border-opacity)));
 }
 
+.border-green-600 {
+  --tw-border-opacity: 1;
+  border-color: rgb(22 163 74 / var(--tw-border-opacity));
+}
+
 .bg-base-200 {
   --tw-bg-opacity: 1;
   background-color: var(--fallback-b2,oklch(var(--b2)/var(--tw-bg-opacity)));
-}
-
-.bg-red-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
-}
-
-.bg-violet-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(139 92 246 / var(--tw-bg-opacity));
 }
 
 .p-1 {
@@ -3585,10 +3522,6 @@ input.tab:checked + .tab-content,
 
 .text-center {
   text-align: center;
-}
-
-.text-right {
-  text-align: right;
 }
 
 .text-2xl {

@@ -14,9 +14,11 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+const port = 8080
+
 func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
-	logger.Info("Starting Server")
+	logger.Info(fmt.Sprintf("Starting Server @:%d", port))
 	defer logger.Info("Stopping Server")
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
@@ -31,7 +33,7 @@ func main() {
 func run(ctx context.Context, logger *slog.Logger) error {
 	g, ctx := errgroup.WithContext(ctx)
 
-	g.Go(startServer(ctx, logger, 8080))
+	g.Go(startServer(ctx, logger, port))
 
 	if err := g.Wait(); err != nil {
 		return fmt.Errorf("error running server: %w", err)

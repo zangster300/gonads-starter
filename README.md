@@ -29,8 +29,10 @@ pnpm install
 
 # Development
 
+Using [taskfile.dev](https://taskfile.dev/)
+
 ```shell
-make live
+task live
 ```
 
 Navigate to [`http://localhost:7331`](http://localhost:7331) in your favorite web browser to begin
