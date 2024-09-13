@@ -1,6 +1,6 @@
 # source: https://github.com/github/gitignore/tree/main
 # ------------------------------------------------------------------
-# gonad-starter
+# gonads-starter
 data/*
 static/index.js
 static/index.css

@@ -1,4 +1,4 @@
-# GONAD Starter - A Hypermedia Application Starter Template
+# GONADS Starter - A Hypermedia Application Starter Template
 
 # Stack
 
@@ -14,7 +14,7 @@
 1. Clone repo
 
 ```shell
-git clone https://github.com/zangster300/gonad-starter.git
+git clone https://github.com/zangster300/gonads-starter.git
 ```
 
 2. install dependencies

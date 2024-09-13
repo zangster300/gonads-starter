@@ -9,7 +9,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
 
-	"gonad-starter/views/components"
+	"gonads-starter/views/components"
 )
 
 func SetupCounterRoute(router chi.Router, sessionStore sessions.Store) error {

@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"gonad-starter/handlers"
+	"gonads-starter/handlers"
 	"log/slog"
 	"net/http"
 	"os"

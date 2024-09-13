@@ -1,4 +1,4 @@
-module gonad-starter
+module gonads-starter
 
 go 1.23.1
 
