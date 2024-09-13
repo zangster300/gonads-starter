@@ -1,6 +1,6 @@
 {
   "name": "gonad-starter",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "",
   "scripts": {
     "bundle:dev": "esbuild views/ts/index.ts --bundle --sourcemap --outfile=static/index.js",
@@ -11,9 +11,7 @@
     "styles": "tailwindcss -c ./tailwind.config.js -i views/styles/styles.css -o static/index.css",
     "styles:watch": "tailwindcss -c ./tailwind.config.js -i views/styles/styles.css -o static/index.css --watch"
   },
-  "keywords": [],
   "author": "Nicholas Zanghi",
-  "license": "MIT",
   "devDependencies": {
     "autoprefixer": "^10.4.20",
     "daisyui": "^4.12.10",
