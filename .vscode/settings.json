@@ -1,0 +1,6 @@
+{
+  "gopls": {
+    "build.buildFlags": ["-tags=dev"]
+  },
+  "go.useLanguageServer": true
+}

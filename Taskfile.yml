@@ -1,17 +1,45 @@
 version: "3"
 
 tasks:
+  build:templ:
+    cmds:
+      - templ generate -v
+
+  build:styles:
+    cmds:
+      - pnpx tailwindcss -c tailwind.config.js -i web/styles/styles.css -o static/index.css
+
+  build:esbuild:
+    cmds:
+      - pnpx esbuild web/ts/index.ts --bundle --outdir=static/
+
+  build:
+    cmds:
+      - go build -o bin/main .
+    deps:
+      - build:styles
+      - build:templ
+      - build:styles
+      - build:esbuild
+    parallel: true
+
+  debug:
+    cmds:
+      - dlv exec ./bin/main
+    deps:
+      - build
+
   live:templ:
     cmds:
       - templ generate --watch --proxy="http://localhost:8080" --open-browser=false -v
 
   live:styles:
     cmds:
-      - pnpx tailwindcss -c tailwind.config.js -i views/styles/styles.css -o static/index.css --watch
+      - pnpx tailwindcss -c tailwind.config.js -i web/styles/styles.css -o static/index.css --watch
 
   live:esbuild:
     cmds:
-      - pnpx esbuild views/ts/index.ts --bundle --outdir=static/ --watch
+      - pnpx esbuild web/ts/index.ts --bundle --outdir=static/ --watch
 
   live:server:
     cmds:
@@ -44,10 +72,6 @@ tasks:
       - live:esbuild
       - live:sync_static
     parallel: true
-
-  build:
-    cmds:
-      - go build -o bin/main .
 
   run:
     cmds:
