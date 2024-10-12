@@ -60,6 +60,14 @@ Alternatively, a `Debug Main` configuration has been added to the [launch.json](
 - [launch.json](./.vscode/launch.json)
 - [settings.json](./.vscode/settings.json)
 
+# Starting the Server
+
+```shell
+task run
+```
+
+Navigate to [`http://localhost:8080`](http://localhost:8080) in your favorite web browser
+
 # Contributing
 
 Completely open to PR's and feature requests but you'll move faster by forking and building out your own application
@@ -75,6 +83,31 @@ Completely open to PR's and feature requests but you'll move faster by forking a
 
 > [!IMPORTANT]  
 > The `TODO` example relies on the [`TEMPL_EXPERIMENT=rawgo`](https://templ.guide/syntax-and-usage/raw-go/) environment variable being set
+
+### Embedded NATS
+
+An embedded NATS server that powers the `TODO` application is configured and booted up in the [router.go](./handlers/router.go#L16) file
+
+To interface with it, you should install the [nats-cli](https://github.com/nats-io/natscli)
+
+Here are some commands to inspect and make changes to the bucket backing the `TODO` app:
+
+```shell
+# list key value buckets
+nats kv ls
+
+# list keys in the `todos` bucket
+nats kv ls todos
+
+# get the value for [key]
+nats kv get --raw todos [key]
+
+# put a value into [key]
+nats kv put todos [key] '{"todos":[{"text":"Hello, NATS!","completed":true}],"editingIdx":-1,"mode":0}'
+```
+
+> [!IMPORTANT]  
+> To see these updates take place in realtime within the `TODO` example, make sure your browser is pointed to the real server and not the templ proxy server!
 
 ## Client
 
