@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@sudodevnull/datastar':
-        specifier: ^0.18.4
-        version: 0.18.4
+        specifier: ^0.18.12
+        version: 0.18.12
     devDependencies:
       autoprefixer:
         specifier: ^10.4.20
@@ -219,8 +219,8 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@sudodevnull/datastar@0.18.4':
-    resolution: {integrity: sha512-EIdsvxEg3d2itItnyxhvayqD+E8F6dGfKJKIEepJefaO6gzzTEB2dlyOeBY0idkqbm5LxWOhKQDZQUdef0vR0Q==}
+  '@sudodevnull/datastar@0.18.12':
+    resolution: {integrity: sha512-rHXmAczHCe0PzyyiuWr7HUNuTD8xr9tREyL7j8EyQhm38HipisBqHQFZuScvXbl1l+Qq1bkmjqpHG4+/9D1YtQ==}
 
   ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
@@ -779,7 +779,7 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@sudodevnull/datastar@0.18.4': {}
+  '@sudodevnull/datastar@0.18.12': {}
 
   ansi-regex@5.0.1: {}
 
