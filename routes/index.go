@@ -1,4 +1,4 @@
-package handlers
+package routes
 
 import (
 	"context"
@@ -18,7 +18,7 @@ import (
 	"github.com/samber/lo"
 )
 
-func SetupIndexRoute(router chi.Router, store sessions.Store, ns *toolbelt.EmbeddedNATsServer) error {
+func setupIndexRoute(router chi.Router, store sessions.Store, ns *toolbelt.EmbeddedNATsServer) error {
 	nc, err := ns.Client()
 	if err != nil {
 		return fmt.Errorf("error creating nats client: %w", err)

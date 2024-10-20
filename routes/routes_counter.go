@@ -1,4 +1,4 @@
-package handlers
+package routes
 
 import (
 	"net/http"
@@ -12,7 +12,7 @@ import (
 	"gonads-starter/web/components"
 )
 
-func SetupCounterRoute(router chi.Router, sessionStore sessions.Store) error {
+func setupCounterRoute(router chi.Router, sessionStore sessions.Store) error {
 
 	router.Get("/counter", func(w http.ResponseWriter, r *http.Request) {
 		components.CounterInitial().Render(r.Context(), w)

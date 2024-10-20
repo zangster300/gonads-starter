@@ -1,17 +1,24 @@
-version: "3"
+version: '3'
+
+env:
+  STATIC_DIR: 'web/static'
 
 tasks:
   build:templ:
     cmds:
-      - templ generate -v
+      - go run github.com/a-h/templ/cmd/templ@v0.2.778 generate -v
 
   build:styles:
     cmds:
-      - pnpx tailwindcss -c tailwind.config.js -i web/styles/styles.css -o static/index.css
+      - pnpx tailwindcss -c tailwind.config.js -i web/styles/styles.css -o $STATIC_DIR/index.css
 
   build:esbuild:
     cmds:
-      - pnpx esbuild web/ts/index.ts --bundle --outdir=static/
+      - pnpx esbuild web/libs/datastar/index.ts --bundle --outdir=$STATIC_DIR
+
+  build:lit-html:
+    cmds:
+      - pnpm -r --filter=lit-html build
 
   build:
     cmds:
@@ -19,27 +26,31 @@ tasks:
     deps:
       - build:styles
       - build:templ
-      - build:styles
+      - build:lit-html
       - build:esbuild
     parallel: true
 
   debug:
     cmds:
-      - dlv exec ./bin/main
+      - go run github.com/go-delve/delve/cmd/dlv@v1.23.1 exec ./bin/main
     deps:
       - build
 
   live:templ:
     cmds:
-      - templ generate --watch --proxy="http://localhost:8080" --open-browser=false -v
+      - go run github.com/a-h/templ/cmd/templ@v0.2.778 generate --watch --proxy="http://localhost:8080" --open-browser=false -v
 
   live:styles:
     cmds:
-      - pnpx tailwindcss -c tailwind.config.js -i web/styles/styles.css -o static/index.css --watch
+      - pnpx tailwindcss -c tailwind.config.js -i web/styles/styles.css -o $STATIC_DIR/index.css --watch
 
   live:esbuild:
     cmds:
-      - pnpx esbuild web/ts/index.ts --bundle --outdir=static/ --watch
+      - pnpx esbuild web/libs/datastar/index.ts --sourcemap --bundle --outdir=$STATIC_DIR --watch
+
+  live:lit-html:
+    cmds:
+      - pnpm -r --filter=lit-html build:dev
 
   live:server:
     cmds:
@@ -57,11 +68,11 @@ tasks:
     cmds:
       - |
         go run github.com/air-verse/air@v1.52.3 \
-        --build.cmd "templ generate --notify-proxy" \
+        --build.cmd "go run github.com/a-h/templ/cmd/templ@v0.2.778 generate --notify-proxy" \
         --build.bin "true" \
         --build.delay "100" \
         --build.exclude_dir "" \
-        --build.include_dir "static" \
+        --build.include_dir "$STATIC_DIR" \
         --build.include_ext "js,css"
 
   live:
@@ -69,6 +80,7 @@ tasks:
       - live:templ
       - live:server
       - live:styles
+      - live:lit-html
       - live:esbuild
       - live:sync_static
     parallel: true

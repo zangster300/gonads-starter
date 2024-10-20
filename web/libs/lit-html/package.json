@@ -1,0 +1,39 @@
+{
+  "name": "@gonads-starter/lit-html",
+  "files": [
+    "dist"
+  ],
+  "private": false,
+  "main": "dist/lit-html.js",
+  "module": "dist/lit-html.js",
+  "types": "dist/lit-html.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/lit-html.d.ts",
+      "import": "./dist/lit-html.js",
+      "require": "./dist/lit-html.js"
+    }
+  },
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:dev": "pnpx vite build --mode dev --watch",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "lit": "^3.2.1",
+    "sortablejs": "^1.15.3"
+  },
+  "devDependencies": {
+    "@types/sortablejs": "^1.15.8",
+    "autoprefixer": "^10.4.20",
+    "picocolors": "^1.1.1",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.9",
+    "vite-plugin-dts": "^4.2.4"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "@gonads-starter/datastar",
+  "dependencies": {
+    "@sudodevnull/datastar": "latest"
+  }
+}

@@ -1,0 +1,1 @@
+import '@sudodevnull/datastar';

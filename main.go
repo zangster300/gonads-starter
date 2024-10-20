@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"gonads-starter/handlers"
+	"gonads-starter/routes"
 	"log/slog"
 	"net/http"
 	"os"
@@ -51,9 +51,9 @@ func startServer(ctx context.Context, logger *slog.Logger, port int) func() erro
 			middleware.Recoverer,
 		)
 
-		router.Handle("/*", static())
+		router.Handle("/static/*", http.StripPrefix("/static/", static(logger)))
 
-		handlers.SetupRoutes(logger, router)
+		routes.SetupRoutes(logger, router)
 
 		srv := &http.Server{
 			Addr:    fmt.Sprintf("localhost:%d", port),

@@ -1,4 +1,4 @@
-package handlers
+package routes
 
 import (
 	"context"
@@ -23,8 +23,9 @@ func SetupRoutes(logger *slog.Logger, router chi.Router) error {
 	sessionStore.MaxAge(int(24 * time.Hour / time.Second))
 
 	if err := errors.Join(
-		SetupIndexRoute(router, sessionStore, ns),
-		SetupCounterRoute(router, sessionStore),
+		setupIndexRoute(router, sessionStore, ns),
+		setupCounterRoute(router, sessionStore),
+		setupSortableRoute(router),
 	); err != nil {
 		return fmt.Errorf("error setting up routes: %w", err)
 	}
