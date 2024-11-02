@@ -1,10 +1,12 @@
-version: '3'
+version: "3"
 
 env:
-  STATIC_DIR: 'web/static'
+  STATIC_DIR: "web/static"
 
 tasks:
   build:templ:
+    env:
+      TEMPL_EXPERIMENT: rawgo
     cmds:
       - go run github.com/a-h/templ/cmd/templ@v0.2.778 generate -v
 
@@ -37,6 +39,8 @@ tasks:
       - build
 
   live:templ:
+    env:
+      TEMPL_EXPERIMENT: rawgo
     cmds:
       - go run github.com/a-h/templ/cmd/templ@v0.2.778 generate --watch --proxy="http://localhost:8080" --open-browser=false -v
 
