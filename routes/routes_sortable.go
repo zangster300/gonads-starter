@@ -1,10 +1,10 @@
 package routes
 
 import (
-	"gonads-starter/web/components"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/zangster300/northstar/web/components"
 )
 
 func setupSortableRoute(router chi.Router) error {

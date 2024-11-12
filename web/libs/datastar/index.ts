@@ -1,1 +1,1 @@
-import '@sudodevnull/datastar';
+import "@sudodevnull/datastar";

@@ -30,8 +30,8 @@ importers:
   web/libs/datastar:
     dependencies:
       '@sudodevnull/datastar':
-        specifier: latest
-        version: 0.19.5
+        specifier: 0.19.9
+        version: 0.19.9
 
   web/libs/lit-html:
     dependencies:
@@ -540,8 +540,8 @@ packages:
   '@rushstack/ts-command-line@4.22.6':
     resolution: {integrity: sha512-QSRqHT/IfoC5nk9zn6+fgyqOPXHME0BfchII9EUPR19pocsNp/xSbeBCbD3PIR2Lg+Q5qk7OFqk1VhWPMdKHJg==}
 
-  '@sudodevnull/datastar@0.19.5':
-    resolution: {integrity: sha512-cp8Be3w9nnCp66JuoLFVsH1ftxK9XVfm3EPqkXDUVSlXAyeD3j9WL6FvQTqPw8kd25MMMg019F72i5K8+88/7A==}
+  '@sudodevnull/datastar@0.19.9':
+    resolution: {integrity: sha512-nxGq69jci9mDjgpT0MXJv64tF9Ynq7ERGBO3d8PLAI/vpjZeDV2U98gMWXSOTFPu4Vk4FUrivmaPl5mHYEUzHw==}
 
   '@types/argparse@1.0.38':
     resolution: {integrity: sha512-ebDJ9b0e702Yr7pWgB0jzm+CX4Srzz8RcXtLJDJB+BSccqMa36uyH/zUsSYao5+BD1ytv3k3rPYCq4mAE1hsXA==}
@@ -1632,7 +1632,7 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
-  '@sudodevnull/datastar@0.19.5': {}
+  '@sudodevnull/datastar@0.19.9': {}
 
   '@types/argparse@1.0.38': {}
 

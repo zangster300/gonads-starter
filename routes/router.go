@@ -19,7 +19,7 @@ func SetupRoutes(logger *slog.Logger, router chi.Router) error {
 	}
 	ns.WaitForServer()
 
-	sessionStore := sessions.NewCookieStore([]byte("gonads-session-secret"))
+	sessionStore := sessions.NewCookieStore([]byte("session-secret"))
 	sessionStore.MaxAge(int(24 * time.Hour / time.Second))
 
 	if err := errors.Join(

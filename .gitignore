@@ -1,6 +1,5 @@
 # source: https://github.com/github/gitignore/tree/main
 # ------------------------------------------------------------------
-# gonads-starter
 data/*
 web/static/**/*
 

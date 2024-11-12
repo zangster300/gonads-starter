@@ -8,8 +8,7 @@ import (
 	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
-
-	"gonads-starter/web/components"
+	"github.com/zangster300/northstar/web/components"
 )
 
 func setupCounterRoute(router chi.Router, sessionStore sessions.Store) error {

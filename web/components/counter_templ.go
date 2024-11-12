@@ -8,7 +8,7 @@ package components
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "gonads-starter/web/layouts"
+import "github.com/zangster300/northstar/web/layouts"
 
 type CounterStore struct {
 	Global uint32 `json:"global"`

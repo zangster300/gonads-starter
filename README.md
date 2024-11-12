@@ -1,4 +1,4 @@
-# GONADS Starter - A Hypermedia Application Starter Template
+# NORTHSTAR - A Hypermedia Application Starter Template
 
 # Stack
 
@@ -13,7 +13,7 @@
 1. Clone this repository
 
 ```shell
-git clone https://github.com/zangster300/gonads-starter.git
+git clone https://github.com/zangster300/northstar.git
 ```
 
 2. Install Dependencies

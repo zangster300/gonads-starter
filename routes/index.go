@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"gonads-starter/web/components"
-	"gonads-starter/web/pages"
 	"net/http"
 	"strconv"
 	"time"
@@ -16,6 +14,8 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/nats-io/nats.go/jetstream"
 	"github.com/samber/lo"
+	"github.com/zangster300/northstar/web/components"
+	"github.com/zangster300/northstar/web/pages"
 )
 
 func setupIndexRoute(router chi.Router, store sessions.Store, ns *toolbelt.EmbeddedNATsServer) error {
@@ -52,9 +52,9 @@ func setupIndexRoute(router chi.Router, store sessions.Store, ns *toolbelt.Embed
 	resetMVC := func(mvc *components.TodoMVC) {
 		mvc.Mode = components.TodoViewModeAll
 		mvc.Todos = []*components.Todo{
-			{Text: "Learn any backend language", Completed: true},
+			{Text: "Learn a backend language", Completed: true},
 			{Text: "Learn Datastar", Completed: false},
-			{Text: "Create Hypermedia, take over the world", Completed: false},
+			{Text: "Create Hypermedia", Completed: false},
 			{Text: "???", Completed: false},
 			{Text: "Profit", Completed: false},
 		}

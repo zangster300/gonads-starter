@@ -1,5 +1,5 @@
 {
-  "name": "@gonads-starter/lit-html",
+  "name": "@northstar/lit-html",
   "files": [
     "dist"
   ],

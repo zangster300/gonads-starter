@@ -1,4 +1,4 @@
-module gonads-starter
+module github.com/zangster300/northstar
 
 go 1.23.1
 

@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"gonads-starter/routes"
 	"log/slog"
 	"net/http"
 	"os"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/zangster300/northstar/routes"
 	"golang.org/x/sync/errgroup"
 )
 
