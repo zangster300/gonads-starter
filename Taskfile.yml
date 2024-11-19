@@ -1,7 +1,9 @@
-version: '3'
+version: "3"
 
 env:
-  STATIC_DIR: 'web/static'
+  STATIC_DIR: "web/static"
+
+dotenv: [".env"]
 
 tasks:
   build:templ:

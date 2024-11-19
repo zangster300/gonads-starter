@@ -1,0 +1,71 @@
+package components
+
+import (
+	"fmt"
+	"gonads-starter/web/layouts"
+)
+
+type Task struct {
+	ID        string `json:"_id"`
+	Text      string `json:"text"`
+	Completed bool   `json:"completed"`
+}
+
+// Component for rendering a single task item
+templ TaskItem(id string, text string, completed bool) {
+	<li class="flex items-center gap-8 p-1 p-2 group" id={ fmt.Sprintf("task%d", id) }>
+		<label
+			class="text-4xl cursor-pointer"
+			data-on-click={ fmt.Sprintf("$$post('/api/tasks/%s/toggle')", id) }
+		>
+			if completed {
+				@icon("material-symbols:check-box-outline")
+			} else {
+				@icon("material-symbols:check-box-outline-blank")
+			}
+		</label>
+		<label
+			class="flex-1 text-lg cursor-pointer select-none"
+			data-on-click={ fmt.Sprintf("$$get('/api/tasks/%s/edit')", id) }
+		>{ text }</label>
+		<button
+			class="invisible btn btn-error group-hover:visible"
+			data-on-click={ fmt.Sprintf("$$delete('/api/tasks/%s')", id) }
+			data-testid={ fmt.Sprintf("delete_task%s", id) }
+		>
+			@icon("material-symbols:close")
+		</button>
+	</li>
+}
+
+// Component for rendering the task list
+templ TasksView(tasks []*Task) {
+	<ul class="divide-y divide-primary" data-testid="tasks_list">
+		for _, task := range tasks {
+			@TaskItem(task.ID, task.Text, task.Completed)
+		}
+	</ul>
+}
+
+// Component for rendering the task container
+templ TaskContainer(tasks []*Task) {
+	@layouts.Base("Tasks") {
+		<div id="tasks-container" class="h-full relative border border-solid border-primary rounded p-2 my-2 mx-28">
+			<div class="flex flex-col w-full gap-4">
+				<section class="flex flex-col gap-2">
+					<header class="flex items-baseline gap-2 justify-center">
+						<h1 class="text-4xl font-bold uppercase font-brand md:text-6xl text-primary">Tasks</h1>
+					</header>
+					{{ hasTasks := len(tasks) > 0 }}
+					if hasTasks {
+						<section class="max-h-[calc(100vh-400px)] overflow-scroll">
+							@TasksView(tasks)
+						</section>
+					} else {
+						<p class="text-center">No tasks available.</p>
+					}
+				</section>
+			</div>
+		</div>
+	}
+}
