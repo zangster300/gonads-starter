@@ -129,14 +129,15 @@ func main() {
             log.Fatalf("Failed to toggle task: %v", err)
         }
 
-        tasks, _ := db.LoadAllTasks()
-
+		task, err := db.LoadTask(id)
+		if err != nil {
+			log.Fatalf("Failed to load task: %v", err)
+		}
 
         sse := datastar.NewSSE(w, r)
 
-        for _, task := range tasks {
-			datastar.RenderFragmentTempl(sse, components.TaskItem(task.ID, task.Text, task.IsCompleted))
-		}
+		// Delaney
+        datastar.RenderFragmentTempl(sse, components.TaskItem(task.ID, task.Text, task.IsCompleted))
 	})
 
 	http.ListenAndServe(":4000", router)

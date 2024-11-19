@@ -145,7 +145,7 @@ func (db *ConvexDB) LoadAllTasks() ([]*Task, error) {
 }
 
 func (db *ConvexDB) LoadTask(id string) (*Task, error) {
-	args := UdfExecution{"load:task", map[string]interface{}{"normalizedId": id}, "json"}
+	args := UdfExecution{"tasks:getById", map[string]interface{}{"id": id}, "json"}
 	resp, err := db.query(&args)
 	if err != nil {
 		return nil, err
