@@ -105,12 +105,10 @@ func main() {
 			log.Fatalf("Failed to load tasks: %v", err)
 		}
 
-
 		// Print all tasks
 		for _, task := range tasks {
 			fmt.Printf("Task ID: %s, Text: %s, Completed: %t\n", task.ID, task.Text, task.IsCompleted)
 		}
-
 
 		taskComponents := make([]*components.Task, len(tasks))
 		for i, task := range tasks {
@@ -120,28 +118,27 @@ func main() {
 		components.TaskContainer(taskComponents).Render(r.Context(), w)
 	})
 
-
 	router.Post("/api/tasks/{id}/toggle", func(w http.ResponseWriter, r *http.Request) {
 		id := chi.URLParam(r, "id")
-        fmt.Println("Toggling task with ID:", id)
-        err := db.ToggleTask(id)
-        if err != nil {
-            log.Fatalf("Failed to toggle task: %v", err)
-        }
+		fmt.Println("Toggling task with ID:", id)
+		err := db.ToggleTask(id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
 		task, err := db.LoadTask(id)
 		if err != nil {
-			log.Fatalf("Failed to load task: %v", err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
-        sse := datastar.NewSSE(w, r)
+		sse := datastar.NewSSE(w, r)
 
-		// Delaney
-        datastar.RenderFragmentTempl(sse, components.TaskItem(task.ID, task.Text, task.IsCompleted))
+		c := components.TaskItem(task.ID, task.Text, task.IsCompleted)
+		datastar.RenderFragmentTempl(sse, c)
 	})
 
 	http.ListenAndServe(":4000", router)
-
-	
 
 }

@@ -57,25 +57,25 @@ tasks:
   live:server:
     cmds:
       - |
-        go run github.com/air-verse/air@v1.52.3 \
-        --build.cmd "go build -tags dev -o tmp/bin/main" \
-        --build.bin "tmp/bin/main" \
-        --build.delay "20" \
-        --build.exclude_dir "node_modules,data,public" \
-        --build.include_ext "go" \
-        --build.stop_on_error "false" \
-        --misc.clean_on_exit true
+          go run github.com/air-verse/air@v1.52.3 \
+          --build.cmd "go build -tags dev -o tmp/bin/main" \
+          --build.bin "tmp/bin/main" \
+          --build.delay "20" \
+          --build.exclude_dir "node_modules,data,public" \
+          --build.include_ext "go" \
+          --build.stop_on_error "false" \
+          --misc.clean_on_exit true
 
   live:sync_static:
     cmds:
       - |
-        go run github.com/air-verse/air@v1.52.3 \
-        --build.cmd "go run github.com/a-h/templ/cmd/templ@v0.2.778 generate --notify-proxy" \
-        --build.bin "true" \
-        --build.delay "100" \
-        --build.exclude_dir "" \
-        --build.include_dir "$STATIC_DIR" \
-        --build.include_ext "js,css"
+          go run github.com/air-verse/air@v1.52.3 \
+          --build.cmd "go run github.com/a-h/templ/cmd/templ@v0.2.778 generate --notify-proxy" \
+          --build.bin "true" \
+          --build.delay "100" \
+          --build.exclude_dir "" \
+          --build.include_dir "$STATIC_DIR" \
+          --build.include_ext "js,css"
 
   live:
     deps:

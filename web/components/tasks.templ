@@ -13,7 +13,7 @@ type Task struct {
 
 // Component for rendering a single task item
 templ TaskItem(id string, text string, completed bool) {
-	<li class="flex items-center gap-8 p-1 p-2 group" id={ fmt.Sprintf("task%d", id) }>
+	<li class="flex items-center gap-8 p-1 p-2 group" id={ "task" + id }>
 		<label
 			class="text-4xl cursor-pointer"
 			data-on-click={ fmt.Sprintf("$$post('/api/tasks/%s/toggle')", id) }
