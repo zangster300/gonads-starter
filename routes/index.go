@@ -149,25 +149,22 @@ func setupIndexRoute(router chi.Router, store sessions.Store, ns *embeddednats.S
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
-
-				datastar.NewSSE(w, r)
 			})
 
 			todosRouter.Put("/cancel", func(w http.ResponseWriter, r *http.Request) {
 
 				sessionID, mvc, err := mvcSession(w, r)
+				sse := datastar.NewSSE(w, r)
 				if err != nil {
-					http.Error(w, err.Error(), http.StatusInternalServerError)
+					sse.ConsoleError(err)
 					return
 				}
 
 				mvc.EditingIdx = -1
 				if err := saveMVC(r.Context(), sessionID, mvc); err != nil {
-					http.Error(w, err.Error(), http.StatusInternalServerError)
+					sse.ConsoleError(err)
 					return
 				}
-
-				datastar.NewSSE(w, r)
 			})
 
 			todosRouter.Put("/mode/{mode}", func(w http.ResponseWriter, r *http.Request) {
@@ -196,8 +193,6 @@ func setupIndexRoute(router chi.Router, store sessions.Store, ns *embeddednats.S
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
-
-				datastar.NewSSE(w, r)
 			})
 
 			todosRouter.Route("/{idx}", func(todoRouter chi.Router) {
@@ -213,13 +208,16 @@ func setupIndexRoute(router chi.Router, store sessions.Store, ns *embeddednats.S
 
 				todoRouter.Post("/toggle", func(w http.ResponseWriter, r *http.Request) {
 					sessionID, mvc, err := mvcSession(w, r)
+
+					sse := datastar.NewSSE(w, r)
 					if err != nil {
-						http.Error(w, err.Error(), http.StatusInternalServerError)
+						sse.ConsoleError(err)
 						return
 					}
 
 					i, err := routeIndex(w, r)
 					if err != nil {
+						sse.ConsoleError(err)
 						return
 					}
 
@@ -240,8 +238,6 @@ func setupIndexRoute(router chi.Router, store sessions.Store, ns *embeddednats.S
 					}
 
 					saveMVC(r.Context(), sessionID, mvc)
-
-					datastar.NewSSE(w, r)
 				})
 
 				todoRouter.Route("/edit", func(editRouter chi.Router) {
@@ -259,8 +255,6 @@ func setupIndexRoute(router chi.Router, store sessions.Store, ns *embeddednats.S
 
 						mvc.EditingIdx = i
 						saveMVC(r.Context(), sessionID, mvc)
-
-						datastar.NewSSE(w, r)
 					})
 
 					editRouter.Put("/", func(w http.ResponseWriter, r *http.Request) {
@@ -274,7 +268,6 @@ func setupIndexRoute(router chi.Router, store sessions.Store, ns *embeddednats.S
 							return
 						}
 
-						datastar.NewSSE(w, r)
 						if store.Input == "" {
 							return
 						}
@@ -325,8 +318,6 @@ func setupIndexRoute(router chi.Router, store sessions.Store, ns *embeddednats.S
 						})
 					}
 					saveMVC(r.Context(), sessionID, mvc)
-
-					datastar.NewSSE(w, r)
 				})
 			})
 		})
@@ -344,6 +335,7 @@ func MustJSONMarshal(v any) string {
 }
 
 func upsertSessionID(store sessions.Store, r *http.Request, w http.ResponseWriter) (string, error) {
+
 	sess, err := store.Get(r, "connections")
 	if err != nil {
 		return "", fmt.Errorf("failed to get session: %w", err)

@@ -48,32 +48,30 @@ templ TodosMVCView(mvc *TodoMVC) {
 			class="flex flex-col w-full gap-4"
 			data-store={ fmt.Sprintf("{input:'%s'}", input) }
 		>
+			<p class="text-sm">
+				This mini application is driven by a
+				<span class="italic font-bold uppercase text-primary">single get request!</span>
+				As you interact with the UI, the backend state is updated and new partial HTML fragments are sent down to the client via Server-Sent Events.  You can make simple apps or full blown SPA replacements with this pattern.  Open your dev tools and watch the network tab to see the magic happen (you will want to look for the "/todos" Network/EventStream tab).
+			</p>
 			<section class="flex flex-col gap-2">
 				<header class="flex flex-col gap-2">
-					<div class="alert alert-info">
-						@icon("material-symbols:info")
-						<p>
-							<div class="text-sm">
-								This mini application is driven by a
-								<span class="italic font-bold uppercase text-primary">single get request!</span>
-								<br/>
-								As you interact with the UI, the backend state is updated and new partial HTML fragments are sent down to the client via Server-Sent Events.  You can make simple apps or full blown SPA replacements with this pattern.  Open you dev tools and watch the network tab to see the magic happen (you will want to look for the "/todos" Network/EventStream tab).
-							</div>
-						</p>
+					<div class="flex items-baseline gap-2">
+						<h1 class="text-4xl font-bold uppercase font-brand md:text-6xl text-primary">todos</h1>
+						<h3 class="text-lg">example</h3>
 					</div>
-					<div class="flex items-baseline gap-2 justify-center">
-						<h1 class="text-4xl font-bold uppercase font-brand md:text-6xl text-primary">todo's</h1>
-					</div>
-					<a href="https://datastar.fly.dev/" class="link text-center">Powered by Datastar 🚀</a>
-					<h2 class="text-center my-2 text-sm">
+					<h2 class="text-sm">
 						The input is bound to a local store, but this is not a single page application.  It is like having <a class="link-primary" href="https://htmx.org" target="_blank">HTMX</a> + <a class="link-primary" href="https://alpinejs.dev/" target="_blank">Alpine.js</a> but with just one API to learn and much easier to extend.
 					</h2>
 					<div class="flex items-center gap-2">
 						if hasTodos {
 							<div class="tooltip" data-tip="toggle all todos">
 								<button
+									id="toggleAll"
 									class="btn btn-lg"
 									data-on-click="$post('/api/todos/-1/toggle')"
+									data-testid="toggle_all_todos"
+									data-indicator="toggleAllFetching"
+									data-bind-disabled="$toggleAllFetching"
 								>
 									@icon("material-symbols:checklist")
 								</button>
@@ -82,11 +80,12 @@ templ TodosMVCView(mvc *TodoMVC) {
 						if mvc.EditingIdx <0 {
 							@TodoInput(-1)
 						}
+						@sseIndicator("toggleAllFetching")
 					</div>
 				</header>
 				if hasTodos {
-					<section class="max-h-[calc(100vh-400px)] overflow-scroll">
-						<ul class="divide-y divide-primary">
+					<section>
+						<ul class="divide-y divide-primary" data-testid="todos_list">
 							for i, todo := range mvc.Todos {
 								@TodoRow(mvc.Mode, todo, i, i == mvc.EditingIdx)
 							}
@@ -94,7 +93,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 					</section>
 					<footer class="flex flex-wrap items-center justify-between gap-2">
 						<span class="todo-count">
-							<strong>
+							<strong data-testid="todo_count">
 								{ fmt.Sprint(left) }
 								if (len(mvc.Todos) > 1) {
 									items
@@ -106,11 +105,12 @@ templ TodosMVCView(mvc *TodoMVC) {
 						<div class="join">
 							for i := TodoViewModeAll; i < TodoViewModeLast; i++ {
 								if i == mvc.Mode {
-									<div class="btn btn-xs btn-primary join-item">{ TodoViewModeStrings[i] }</div>
+									<div class="btn btn-xs btn-primary join-item" data-testid={ TodoViewModeStrings[i] + "_mode" }>{ TodoViewModeStrings[i] }</div>
 								} else {
 									<button
 										class="btn btn-xs join-item"
 										data-on-click={ fmt.Sprintf("$put('/api/todos/mode/%d')", i) }
+										data-testid={ TodoViewModeStrings[i] + "_mode" }
 									>
 										{ TodoViewModeStrings[i] }
 									</button>
@@ -123,6 +123,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 									<button
 										class="btn btn-error btn-xs join-item"
 										data-on-click="$delete('/api/todos/-1')"
+										data-testid="clear_todos"
 									>
 										@icon("material-symbols:delete")
 									</button>
@@ -132,6 +133,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 								<button
 									class="btn btn-warning btn-xs join-item"
 									data-on-click="$put('/api/todos/reset')"
+									data-testid="reset_todos"
 								>
 									@icon("material-symbols:delete-sweep")
 								</button>
@@ -176,10 +178,12 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 		mode == TodoViewModeAll) ||
 		(mode == TodoViewModeActive && !todo.Completed) ||
 		(mode == TodoViewModeCompleted && todo.Completed) {
-		<li class="flex items-center gap-8 p-1 p-2 group" id={ fmt.Sprintf("todo%d", i) }>
+		<li class="flex items-center gap-8 p-2 group" id={ fmt.Sprintf("todo%d", i) }>
 			<label
+				id={ fmt.Sprintf("toggle%d", i) }
 				class="text-4xl cursor-pointer"
-				data-on-click={ fmt.Sprintf("$post('/api/todos/%d/toggle')", i) }
+				data-on-click={ datastar.PostSSE("/api/todos/%d/toggle", i) }
+				data-indicator={ fetchingSignalName }
 			>
 				if todo.Completed {
 					@icon("material-symbols:check-box-outline")
@@ -191,11 +195,17 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 				id={ indicatorID }
 				class="flex-1 text-lg cursor-pointer select-none"
 				data-on-click={ datastar.GetSSE("/api/todos/%d/edit", i) }
-			>{ todo.Text }</label>
+				data-indicator={ fetchingSignalName }
+			>
+				{ todo.Text }
+			</label>
 			@sseIndicator(fetchingSignalName)
 			<button
+				id={ fmt.Sprintf("delete%d", i) }
 				class="invisible btn btn-error group-hover:visible"
 				data-on-click={ datastar.DeleteSSE("/api/todos/%d", i) }
+				data-indicator={ fetchingSignalName }
+				data-disabled={ "$" + fetchingSignalName }
 			>
 				@icon("material-symbols:close")
 			</button>
