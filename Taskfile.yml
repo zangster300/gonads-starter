@@ -4,11 +4,12 @@ env:
   STATIC_DIR: "web/static"
 
 tasks:
+  # The `build:` tasks below are used together for "production" builds of your project
   build:templ:
     env:
       TEMPL_EXPERIMENT: rawgo
     cmds:
-      - go run github.com/a-h/templ/cmd/templ@v0.2.778 generate -v
+      - go run github.com/a-h/templ/cmd/templ@v0.2.793 generate -v
 
   build:styles:
     cmds:
@@ -32,17 +33,19 @@ tasks:
       - build:esbuild
     parallel: true
 
+  # Use this task to debug your project with the delve debugger
   debug:
     cmds:
       - go run github.com/go-delve/delve/cmd/dlv@v1.23.1 exec ./bin/main
     deps:
       - build
 
+  # The `live:` tasks below are used together for "dev" builds, and will hot-reload your entire project when there are code changes
   live:templ:
     env:
       TEMPL_EXPERIMENT: rawgo
     cmds:
-      - go run github.com/a-h/templ/cmd/templ@v0.2.778 generate --watch --proxy="http://localhost:8080" --open-browser=false -v
+      - go run github.com/a-h/templ/cmd/templ@v0.2.793 generate --watch --proxy="http://localhost:8080" --open-browser=false -v
 
   live:styles:
     cmds:
@@ -68,11 +71,11 @@ tasks:
         --build.stop_on_error "false" \
         --misc.clean_on_exit true
 
-  live:sync_static:
+  live:reload:
     cmds:
       - |
         go run github.com/air-verse/air@v1.52.3 \
-        --build.cmd "go run github.com/a-h/templ/cmd/templ@v0.2.778 generate --notify-proxy" \
+        --build.cmd "go run github.com/a-h/templ/cmd/templ@v0.2.793 generate --notify-proxy" \
         --build.bin "true" \
         --build.delay "100" \
         --build.exclude_dir "" \
@@ -86,7 +89,7 @@ tasks:
       - live:styles
       - live:lit-html
       - live:esbuild
-      - live:sync_static
+      - live:reload
     parallel: true
 
   run:

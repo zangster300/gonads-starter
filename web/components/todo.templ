@@ -1,6 +1,9 @@
 package components 
 
-import "fmt"
+import (
+	"fmt"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
+)
 
 type TodoViewMode int
 
@@ -70,8 +73,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 							<div class="tooltip" data-tip="toggle all todos">
 								<button
 									class="btn btn-lg"
-									data-on-click="$$post('/api/todos/-1/toggle')"
-									data-testid="toggle_all_todos"
+									data-on-click="$post('/api/todos/-1/toggle')"
 								>
 									@icon("material-symbols:checklist")
 								</button>
@@ -84,7 +86,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 				</header>
 				if hasTodos {
 					<section class="max-h-[calc(100vh-400px)] overflow-scroll">
-						<ul class="divide-y divide-primary" data-testid="todos_list">
+						<ul class="divide-y divide-primary">
 							for i, todo := range mvc.Todos {
 								@TodoRow(mvc.Mode, todo, i, i == mvc.EditingIdx)
 							}
@@ -92,7 +94,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 					</section>
 					<footer class="flex flex-wrap items-center justify-between gap-2">
 						<span class="todo-count">
-							<strong data-testid="todo_count">
+							<strong>
 								{ fmt.Sprint(left) }
 								if (len(mvc.Todos) > 1) {
 									items
@@ -104,12 +106,11 @@ templ TodosMVCView(mvc *TodoMVC) {
 						<div class="join">
 							for i := TodoViewModeAll; i < TodoViewModeLast; i++ {
 								if i == mvc.Mode {
-									<div class="btn btn-xs btn-primary join-item" data-testid={ TodoViewModeStrings[i] + "_mode" }>{ TodoViewModeStrings[i] }</div>
+									<div class="btn btn-xs btn-primary join-item">{ TodoViewModeStrings[i] }</div>
 								} else {
 									<button
 										class="btn btn-xs join-item"
-										data-on-click={ fmt.Sprintf("$$put('/api/todos/mode/%d')", i) }
-										data-testid={ TodoViewModeStrings[i] + "_mode" }
+										data-on-click={ fmt.Sprintf("$put('/api/todos/mode/%d')", i) }
 									>
 										{ TodoViewModeStrings[i] }
 									</button>
@@ -121,8 +122,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 								<div class="tooltip" data-tip={ fmt.Sprintf("clear %d completed todos", completed) }>
 									<button
 										class="btn btn-error btn-xs join-item"
-										data-on-click="$$delete('/api/todos/-1')"
-										data-testid="clear_todos"
+										data-on-click="$delete('/api/todos/-1')"
 									>
 										@icon("material-symbols:delete")
 									</button>
@@ -131,8 +131,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 							<div class="tooltip" data-tip="Reset list">
 								<button
 									class="btn btn-warning btn-xs join-item"
-									data-on-click="$$put('/api/todos/reset')"
-									data-testid="reset_todos"
+									data-on-click="$put('/api/todos/reset')"
 								>
 									@icon("material-symbols:delete-sweep")
 								</button>
@@ -151,23 +150,26 @@ templ TodosMVCView(mvc *TodoMVC) {
 templ TodoInput(i int) {
 	<input
 		id="todoInput"
-		data-testid="todos_input"
 		class="flex-1 w-full input input-bordered input-lg"
 		placeholder="What needs to be done?"
 		data-model="input"
 		data-on-keypress={ fmt.Sprintf(`
 			if (event.key === 'Enter' && $input.trim().length) {
-				$$put('/api/todos/%d/edit');
+				$put('/api/todos/%d/edit');
 				$input = '';
 			}
 		`, i) }
 		if i >= 0 {
-			data-on-click.outside.capture="$$put('/api/todos/cancel')"
+			data-on-click.outside.capture="$put('/api/todos/cancel')"
 		}
 	/>
 }
 
 templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
+	{{
+		indicatorID := fmt.Sprintf("indicator%d", i)
+		fetchingSignalName := fmt.Sprintf("fetching%d", i)
+	}}
 	if isEditing {
 		@TodoInput(i)
 	} else if (
@@ -177,7 +179,7 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 		<li class="flex items-center gap-8 p-1 p-2 group" id={ fmt.Sprintf("todo%d", i) }>
 			<label
 				class="text-4xl cursor-pointer"
-				data-on-click={ fmt.Sprintf("$$post('/api/todos/%d/toggle')", i) }
+				data-on-click={ fmt.Sprintf("$post('/api/todos/%d/toggle')", i) }
 			>
 				if todo.Completed {
 					@icon("material-symbols:check-box-outline")
@@ -186,13 +188,14 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 				}
 			</label>
 			<label
+				id={ indicatorID }
 				class="flex-1 text-lg cursor-pointer select-none"
-				data-on-click={ fmt.Sprintf("$$get('/api/todos/%d/edit')", i) }
+				data-on-click={ datastar.GetSSE("/api/todos/%d/edit", i) }
 			>{ todo.Text }</label>
+			@sseIndicator(fetchingSignalName)
 			<button
 				class="invisible btn btn-error group-hover:visible"
-				data-on-click={ fmt.Sprintf("$$delete('/api/todos/%d')", i) }
-				data-testid={ fmt.Sprintf("delete_todo%d", i) }
+				data-on-click={ datastar.DeleteSSE("/api/todos/%d", i) }
 			>
 				@icon("material-symbols:close")
 			</button>

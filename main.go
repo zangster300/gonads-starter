@@ -53,7 +53,11 @@ func startServer(ctx context.Context, logger *slog.Logger, port int) func() erro
 
 		router.Handle("/static/*", http.StripPrefix("/static/", static(logger)))
 
-		routes.SetupRoutes(logger, router)
+		cleanup, err := routes.SetupRoutes(ctx, logger, router)
+		defer cleanup()
+		if err != nil {
+			return fmt.Errorf("error setting up routes: %w", err)
+		}
 
 		srv := &http.Server{
 			Addr:    fmt.Sprintf("localhost:%d", port),

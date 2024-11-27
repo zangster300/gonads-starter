@@ -5,9 +5,9 @@ import (
 	"sync/atomic"
 
 	"github.com/Jeffail/gabs/v2"
-	"github.com/delaneyj/datastar"
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
 	"github.com/zangster300/northstar/web/components"
 )
 
@@ -47,8 +47,7 @@ func setupCounterRoute(router chi.Router, sessionStore sessions.Store) error {
 			User:   userCount,
 		}
 
-		sse := datastar.NewSSE(w, r)
-		datastar.RenderFragmentTempl(sse, components.Counter(store))
+		datastar.NewSSE(w, r).MergeFragmentTempl(components.Counter(store))
 	})
 
 	updateGlobal := func(store *gabs.Container) {
@@ -60,8 +59,7 @@ func setupCounterRoute(router chi.Router, sessionStore sessions.Store) error {
 			update := gabs.New()
 			updateGlobal(update)
 
-			sse := datastar.NewSSE(w, r)
-			datastar.PatchStore(sse, update)
+			datastar.NewSSE(w, r).MarshalAndMergeSignals(update)
 		})
 
 		incrementRouter.Post("/user", func(w http.ResponseWriter, r *http.Request) {
@@ -80,8 +78,7 @@ func setupCounterRoute(router chi.Router, sessionStore sessions.Store) error {
 			updateGlobal(update)
 			update.Set(val, "user")
 
-			sse := datastar.NewSSE(w, r)
-			datastar.PatchStore(sse, update)
+			datastar.NewSSE(w, r).MarshalAndMergeSignals(update)
 		})
 	})
 

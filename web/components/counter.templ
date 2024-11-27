@@ -11,13 +11,13 @@ templ CounterButtons() {
 	<div class="flex justify-around gap-4">
 		<button
 			class="btn btn-info"
-			data-on-click="$$post('/counter/increment/global')"
+			data-on-click="$post('/counter/increment/global')"
 		>
 			Increment Global
 		</button>
 		<button
 			class="btn btn-success"
-			data-on-click="$$post('/counter/increment/user')"
+			data-on-click="$post('/counter/increment/user')"
 		>
 			Increment User
 		</button>
@@ -51,7 +51,7 @@ templ Counter(store CounterStore) {
 templ CounterInitial() {
 	@layouts.Base("Counter Example") {
 		<article class="prose mx-auto m-2">
-			<div id="container" data-on-load="$$get('/counter/data')"></div>
+			<div id="container" data-on-load="$get('/counter/data')"></div>
 		</article>
 	}
 }

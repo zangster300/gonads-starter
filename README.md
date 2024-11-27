@@ -4,7 +4,7 @@
 
 - [Go](https://go.dev/doc/)
 - [NATS](https://docs.nats.io/)
-- [Datastar](https://github.com/delaneyj/datastar)
+- [Datastar](https://github.com/@starfederation/datastar)
 - [Templ](https://templ.guide/)
   - [Tailwind](https://tailwindcss.com/) x [DaisyUI](https://daisyui.com/) x [esbuild](https://esbuild.github.io/)
 

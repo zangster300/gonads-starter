@@ -8,8 +8,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/delaneyj/datastar"
+	datastar "github.com/starfederation/datastar/code/go/sdk"
+
 	"github.com/delaneyj/toolbelt"
+	"github.com/delaneyj/toolbelt/embeddednats"
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
 	"github.com/nats-io/nats.go/jetstream"
@@ -18,15 +20,17 @@ import (
 	"github.com/zangster300/northstar/web/pages"
 )
 
-func setupIndexRoute(router chi.Router, store sessions.Store, ns *toolbelt.EmbeddedNATsServer) error {
+func setupIndexRoute(router chi.Router, store sessions.Store, ns *embeddednats.Server) error {
 	nc, err := ns.Client()
 	if err != nil {
 		return fmt.Errorf("error creating nats client: %w", err)
 	}
+
 	js, err := jetstream.New(nc)
 	if err != nil {
 		return fmt.Errorf("error creating jetstream client: %w", err)
 	}
+
 	kv, err := js.CreateOrUpdateKeyValue(context.Background(), jetstream.KeyValueConfig{
 		Bucket:      "todos",
 		Description: "Datastar Todos",
@@ -34,6 +38,7 @@ func setupIndexRoute(router chi.Router, store sessions.Store, ns *toolbelt.Embed
 		TTL:         time.Hour,
 		MaxBytes:    16 * 1024 * 1024,
 	})
+
 	if err != nil {
 		return fmt.Errorf("error creating key value: %w", err)
 	}
@@ -123,7 +128,11 @@ func setupIndexRoute(router chi.Router, store sessions.Store, ns *toolbelt.Embed
 							http.Error(w, err.Error(), http.StatusInternalServerError)
 							return
 						}
-						datastar.RenderFragmentTempl(sse, components.TodosMVCView(mvc))
+						c := components.TodosMVCView(mvc)
+						if err := sse.MergeFragmentTempl(c); err != nil {
+							sse.ConsoleError(err)
+							return
+						}
 					}
 				}
 			})
@@ -260,7 +269,7 @@ func setupIndexRoute(router chi.Router, store sessions.Store, ns *toolbelt.Embed
 						}
 						store := &Store{}
 
-						if err := datastar.BodyUnmarshal(r, store); err != nil {
+						if err := datastar.ReadSignals(r, store); err != nil {
 							http.Error(w, err.Error(), http.StatusBadRequest)
 							return
 						}

@@ -1,6 +1,6 @@
 # Purpose
 
-This directory holds resources used for the web portion of the application
+This directory holds resources used for the web portion of an application
 
 # Organization
 
@@ -21,7 +21,7 @@ This directory serves as an entrypoint to be used for storage of any JS/TS libra
 
 Currently it is being used to hold the following:
 
-- Datastar as a vendor dependency
+- Datastar as a vendor dependency from the `npm` registry - [NOTE](./libs/datastar/README.md)
 - Web Components powered by Lit-html
 
 ## Pages
