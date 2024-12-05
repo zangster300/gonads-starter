@@ -85,12 +85,11 @@ tasks:
   live:
     deps:
       - live:templ
-      - live:server
       - live:styles
       - live:lit-html
       - live:esbuild
       - live:reload
-    parallel: true
+      - live:server
 
   run:
     cmds:

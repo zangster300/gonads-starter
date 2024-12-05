@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -14,23 +15,28 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-const port = 8080
-
 func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
-	logger.Info(fmt.Sprintf("Starting Server @:%d", port))
+
+	getPort := func() string {
+		if p, ok := os.LookupEnv("PORT"); ok {
+			return p
+		}
+		return "8080"
+	}
+	logger.Info(fmt.Sprintf("Starting Server 0.0.0.0:" + getPort()))
 	defer logger.Info("Stopping Server")
 
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
-	if err := run(ctx, logger); err != nil {
+	if err := run(ctx, logger, getPort()); err != nil {
 		logger.Error("Error running server", slog.Any("err", err))
 		os.Exit(1)
 	}
 }
 
-func run(ctx context.Context, logger *slog.Logger) error {
+func run(ctx context.Context, logger *slog.Logger, port string) error {
 	g, ctx := errgroup.WithContext(ctx)
 
 	g.Go(startServer(ctx, logger, port))
@@ -42,7 +48,7 @@ func run(ctx context.Context, logger *slog.Logger) error {
 	return nil
 }
 
-func startServer(ctx context.Context, logger *slog.Logger, port int) func() error {
+func startServer(ctx context.Context, logger *slog.Logger, port string) func() error {
 	return func() error {
 		router := chi.NewMux()
 
@@ -60,7 +66,7 @@ func startServer(ctx context.Context, logger *slog.Logger, port int) func() erro
 		}
 
 		srv := &http.Server{
-			Addr:    fmt.Sprintf("localhost:%d", port),
+			Addr:    "0.0.0.0:" + port,
 			Handler: router,
 		}
 

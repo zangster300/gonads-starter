@@ -66,6 +66,24 @@ task run
 
 Navigate to [`http://localhost:8080`](http://localhost:8080) in your favorite web browser
 
+# Deployment
+
+## Building an Executable
+
+The `task build` [task](./Taskfile.yml#L26) will assemble and build a binary [with static assets embedded](./static_prod.go#L19)
+
+## Docker
+
+```shell
+# build an image
+docker build -t northstar:latest .
+
+# run the image in a container
+docker run --name northstar -p 8080:9001 northstar:latest
+```
+
+[Dockerfile](./Dockerfile)
+
 # Contributing
 
 Completely open to PR's and feature requests
