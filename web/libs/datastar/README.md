@@ -1,5 +1,5 @@
 # Datastar Vendor Bundle
 
-This directory contains an `npm` registry reference to Datastar to help beginners obtain a stable copy of the Datastar framework
+This directory holds an `npm` registry reference to `data-star` with all currently available plugins enabled
 
-For advanced users, feel free to remove the `npm` setup entirely and obtain [a bundled copy of Datastar with exactly what you need](https://data-star.dev/bundler)
+For a more specific bundling of plugins, check out [`data-star`'s bundler](https://data-star.dev/bundler)

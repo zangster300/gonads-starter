@@ -6,8 +6,6 @@ env:
 tasks:
   # The `build:` tasks below are used together for "production" builds of your project
   build:templ:
-    env:
-      TEMPL_EXPERIMENT: rawgo
     cmds:
       - go run github.com/a-h/templ/cmd/templ@v0.2.793 generate -v
 
@@ -42,8 +40,6 @@ tasks:
 
   # The `live:` tasks below are used together for "dev" builds, and will hot-reload your entire project when there are code changes
   live:templ:
-    env:
-      TEMPL_EXPERIMENT: rawgo
     cmds:
       - go run github.com/a-h/templ/cmd/templ@v0.2.793 generate --watch --proxy="http://localhost:8080" --open-browser=false -v
 

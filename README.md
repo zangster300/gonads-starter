@@ -4,7 +4,7 @@
 
 - [Go](https://go.dev/doc/)
 - [NATS](https://docs.nats.io/)
-- [Datastar](https://github.com/@starfederation/datastar)
+- [Datastar](https://github.com/starfederation/datastar)
 - [Templ](https://templ.guide/)
   - [Tailwind](https://tailwindcss.com/) x [DaisyUI](https://daisyui.com/) x [esbuild](https://esbuild.github.io/)
 
@@ -94,7 +94,7 @@ Completely open to PR's and feature requests
 
 - [go](https://go.dev/)
 - [nats](https://docs.nats.io/)
-- [datastar](https://datastar.fly.dev/)
+- [data-star sdk](https://github.com/starfederation/datastar/tree/develop/sdk)
 - [templ](https://templ.guide/)
 
 > [!IMPORTANT]  
@@ -140,5 +140,5 @@ nats kv put todos [key] '{"todos":[{"text":"Hello, NATS!","completed":true}],"ed
 
 - [Hypermedia-Driven Applications](https://htmx.org/essays/hypermedia-driven-applications/)
 - [HTMX Sucks](https://htmx.org/essays/htmx-sucks/)
-- [HTMX Sucks (kinda)](https://datastar.fly.dev/essays/htmx_sucks)
-- [Streams All the Way Down](https://datastar.fly.dev/essays/event_streams_all_the_way_down)
+- [HTMX Sucks (kinda)](https://data-star.dev/essays/htmx_sucks)
+- [Streams All the Way Down](https://data-star.dev/essays/event_streams_all_the_way_down)

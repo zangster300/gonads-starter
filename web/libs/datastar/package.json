@@ -1,6 +1,6 @@
 {
   "name": "@northstar/datastar",
   "dependencies": {
-    "@starfederation/datastar": "0.20.1"
+    "@starfederation/datastar": "0.21.2"
   }
 }

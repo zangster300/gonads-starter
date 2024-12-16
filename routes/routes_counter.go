@@ -7,14 +7,14 @@ import (
 	"github.com/Jeffail/gabs/v2"
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
-	datastar "github.com/starfederation/datastar/code/go/sdk"
-	"github.com/zangster300/northstar/web/components"
+	datastar "github.com/starfederation/datastar/sdk/go"
+	"github.com/zangster300/northstar/web/pages"
 )
 
 func setupCounterRoute(router chi.Router, sessionStore sessions.Store) error {
 
 	router.Get("/counter", func(w http.ResponseWriter, r *http.Request) {
-		components.CounterInitial().Render(r.Context(), w)
+		pages.CounterInitial().Render(r.Context(), w)
 	})
 
 	var globalCounter atomic.Uint32
@@ -42,12 +42,12 @@ func setupCounterRoute(router chi.Router, sessionStore sessions.Store) error {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
-		store := components.CounterStore{
+		store := pages.CounterSignals{
 			Global: globalCounter.Load(),
 			User:   userCount,
 		}
 
-		datastar.NewSSE(w, r).MergeFragmentTempl(components.Counter(store))
+		datastar.NewSSE(w, r).MergeFragmentTempl(pages.Counter(store))
 	})
 
 	updateGlobal := func(store *gabs.Container) {

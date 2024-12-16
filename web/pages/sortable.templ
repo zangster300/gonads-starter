@@ -1,4 +1,4 @@
-package components
+package pages
 
 import "github.com/zangster300/northstar/web/layouts"
 
@@ -7,10 +7,10 @@ templ SortableInitial() {
 		<article class="prose mx-auto m-2">
 			<sortable-example
 				class="flex flex-col gap-8"
-				data-store="{title: 'Item Info', info:'', items: [{name: 'item one'}, {name: 'item two'}, {name: 'item three'}, {name: 'item four'}, {name: 'item five'}]}"
-				data-bind-title="$title"
-				data-bind-value="$info"
-				data-bind-items="$items"
+				data-signals="{title: 'Item Info', info:'', items: [{name: 'item one'}, {name: 'item two'}, {name: 'item three'}, {name: 'item four'}, {name: 'item five'}]}"
+				data-attributes-title="title.value"
+				data-attributes-value="info.value"
+				data-attributes-items="items.value"
 				data-on-change="event.detail && console.log(`Send this data somewhere else! ${event.detail}`)"
 			></sortable-example>
 			<script defer type="module" src="/static/lit-html.js"></script>

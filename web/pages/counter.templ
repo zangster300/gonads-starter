@@ -1,8 +1,11 @@
-package components
+package pages
 
-import "github.com/zangster300/northstar/web/layouts"
+import (
+	datastar "github.com/starfederation/datastar/sdk/go"
+	"github.com/zangster300/northstar/web/layouts"
+)
 
-type CounterStore struct {
+type CounterSignals struct {
 	Global uint32 `json:"global"`
 	User   uint32 `json:"user"`
 }
@@ -11,13 +14,13 @@ templ CounterButtons() {
 	<div class="flex justify-around gap-4">
 		<button
 			class="btn btn-info"
-			data-on-click="$post('/counter/increment/global')"
+			data-on-click={ datastar.PostSSE("/counter/increment/global") }
 		>
 			Increment Global
 		</button>
 		<button
 			class="btn btn-success"
-			data-on-click="$post('/counter/increment/user')"
+			data-on-click={ datastar.PostSSE("/counter/increment/user") }
 		>
 			Increment User
 		</button>
@@ -28,19 +31,19 @@ templ CounterCounts() {
 	<div class="flex justify-around gap-4">
 		<div class="flex flex-col items-center gap-1">
 			<div class="text-lg font-bold">Global</div>
-			<div class="text-2xl" data-text="$global"></div>
+			<div class="text-2xl" data-text="global.value"></div>
 		</div>
 		<div class="flex flex-col items-center gap-1">
 			<div class="text-lg font-bold">User</div>
-			<div class="text-2xl" data-text="$user"></div>
+			<div class="text-2xl" data-text="user.value"></div>
 		</div>
 	</div>
 }
 
-templ Counter(store CounterStore) {
+templ Counter(signals CounterSignals) {
 	<div
 		id="container"
-		data-store={ templ.JSONString(store) }
+		data-signals={ templ.JSONString(signals) }
 		class="flex flex-col gap-4"
 	>
 		@CounterButtons()
@@ -51,7 +54,7 @@ templ Counter(store CounterStore) {
 templ CounterInitial() {
 	@layouts.Base("Counter Example") {
 		<article class="prose mx-auto m-2">
-			<div id="container" data-on-load="$get('/counter/data')"></div>
+			<div id="container" data-on-load={ datastar.GetSSE("/counter/data") }></div>
 		</article>
 	}
 }

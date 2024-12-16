@@ -2,7 +2,7 @@ package components
 
 import (
 	"fmt"
-	datastar "github.com/starfederation/datastar/code/go/sdk"
+	datastar "github.com/starfederation/datastar/sdk/go"
 )
 
 type TodoViewMode int
@@ -46,7 +46,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 	<div id="todos-container" class="h-full relative border border-solid border-primary rounded p-2 my-2 mx-28">
 		<div
 			class="flex flex-col w-full gap-4"
-			data-store={ fmt.Sprintf("{input:'%s'}", input) }
+			data-signals={ fmt.Sprintf("{input:'%s'}", input) }
 		>
 			<section class="flex flex-col gap-2">
 				<header class="flex flex-col gap-2">
@@ -76,9 +76,9 @@ templ TodosMVCView(mvc *TodoMVC) {
 								<button
 									id="toggleAll"
 									class="btn btn-lg"
-									data-on-click="$post('/api/todos/-1/toggle')"
+									data-on-click={ datastar.PostSSE("/api/todos/-1/toggle") }
 									data-indicator="toggleAllFetching"
-									data-bind-disabled="$toggleAllFetching"
+									data-attrs-disabled="toggleAllFetching"
 								>
 									@icon("material-symbols:checklist")
 								</button>
@@ -156,17 +156,17 @@ templ TodosMVCView(mvc *TodoMVC) {
 templ TodoInput(i int) {
 	<input
 		id="todoInput"
-		class="flex-1 w-full input input-bordered input-lg"
+		data-testid="todos_input"
+		class="flex-1 w-full italic input input-bordered input-lg"
 		placeholder="What needs to be done?"
-		data-model="input"
-		data-on-keypress={ fmt.Sprintf(`
-			if (event.key === 'Enter' && $input.trim().length) {
-				$put('/api/todos/%d/edit');
-				$input = '';
-			}
+		data-bind-input
+		data-on-keydown={ fmt.Sprintf(`
+			if (evt.key !== 'Enter' || !input.value.trim().length) return;
+			sse('/api/todos/%d/edit', {method:'put'});
+			input.value = '';
 		`, i) }
 		if i >= 0 {
-			data-on-click.outside.capture="$put('/api/todos/cancel')"
+			data-on-click.outside:capture={ datastar.PutSSE("/api/todos/cancel") }
 		}
 	/>
 }
@@ -182,7 +182,7 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 		mode == TodoViewModeAll) ||
 		(mode == TodoViewModeActive && !todo.Completed) ||
 		(mode == TodoViewModeCompleted && todo.Completed) {
-		<li class="flex items-center gap-8 p-2 group" id={ fmt.Sprintf("todo%d", i) }>
+		<li class="flex items-center gap-8 p-1 p-2 group" id={ fmt.Sprintf("todo%d", i) }>
 			<label
 				id={ fmt.Sprintf("toggle%d", i) }
 				class="text-4xl cursor-pointer"
@@ -208,8 +208,9 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 				id={ fmt.Sprintf("delete%d", i) }
 				class="invisible btn btn-error group-hover:visible"
 				data-on-click={ datastar.DeleteSSE("/api/todos/%d", i) }
+				data-testid={ fmt.Sprintf("delete_todo%d", i) }
 				data-indicator={ fetchingSignalName }
-				data-disabled={ "$" + fetchingSignalName }
+				data-attrs-disabled={ fetchingSignalName + ".value" }
 			>
 				@icon("material-symbols:close")
 			</button>

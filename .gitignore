@@ -1,7 +1,9 @@
 # source: https://github.com/github/gitignore/tree/main
 # ------------------------------------------------------------------
 data/*
-web/static/**/*
+
+web/static/*
+!web/static/assets
 
 # ------------------------------------------------------------------
 # Go
