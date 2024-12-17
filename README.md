@@ -97,9 +97,6 @@ Completely open to PR's and feature requests
 - [data-star sdk](https://github.com/starfederation/datastar/tree/develop/sdk)
 - [templ](https://templ.guide/)
 
-> [!IMPORTANT]  
-> The `TODO` example relies on the [`TEMPL_EXPERIMENT=rawgo`](https://templ.guide/syntax-and-usage/raw-go/) environment variable being set
-
 ### Embedded NATS
 
 An embedded NATS server that powers the `TODO` application is configured and booted up in the [router.go](./handlers/router.go#L16) file

@@ -13,7 +13,16 @@ import (
 	"github.com/zangster300/northstar/web/layouts"
 )
 
-func Index(title string) templ.Component {
+type SystemMonitorSignals struct {
+	MemTotal       string `json:"memTotal,omitempty"`
+	MemUsed        string `json:"memUsed,omitempty"`
+	MemUsedPercent string `json:"memUsedPercent,omitempty"`
+	CpuUser        string `json:"cpuUser,omitempty"`
+	CpuSystem      string `json:"cpuSystem,omitempty"`
+	CpuIdle        string `json:"cpuIdle,omitempty"`
+}
+
+func MonitorInitial() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -46,26 +55,26 @@ func Index(title string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-col w-full min-h-screen bg-base-200\"><nav class=\"flex justify-center\"><ul class=\"menu menu-vertical md:menu-horizontal bg-base-200 rounded-box\"><li class=\"hover:text-primary\"><a href=\"/counter\">Counter Example</a></li><li class=\"hover:text-primary\"><a href=\"/monitor\">System Monitoring Example</a></li><li class=\"hover:text-primary\"><a href=\"/sortable\">Sortable Example</a></li></ul></nav><div id=\"todos-container\" data-on-load=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"container\" data-on-load=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(datastar.GetSSE("/api/todos"))
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(datastar.GetSSE("/monitor/events"))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/pages/index.templ`, Line: 18, Col: 73}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/pages/monitor.templ`, Line: 21, Col: 52}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><p>Todos Example</p><p>If you are seeing this message, please clear your cookies and refresh the page.</p></div></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"h-screen flex justify-center items-center\" data-signals=\"{memTotal:&#39;&#39;, memUsed:&#39;&#39;, memUsedPercent:&#39;&#39;, cpuUser:&#39;&#39;, cpuSystem:&#39;&#39;, cpuIdle:&#39;&#39;}\"><div class=\"border border-primary rounded flex gap-8 p-8\"><div id=\"mem\" class=\"flex flex-col\"><h1 class=\"text-center pb-2 text-xl\">Memory</h1><p>Total: <span data-text=\"memTotal.value\"></span></p><p>Used: <span data-text=\"memUsed.value\"></span></p><p>Used (%): <span data-text=\"memUsedPercent.value\"></span></p></div><div id=\"cpu\" class=\"flex flex-col\"><h1 class=\"text-center pb-2 text-xl\">CPU</h1><p>User: <span data-text=\"cpuUser.value\"></span></p><p>System: <span data-text=\"cpuSystem.value\"></span></p><p>Idle: <span data-text=\"cpuIdle.value\"></span></p></div></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return templ_7745c5c3_Err
 		})
-		templ_7745c5c3_Err = layouts.Base(title).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layouts.Base("System Monitoring Example").Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

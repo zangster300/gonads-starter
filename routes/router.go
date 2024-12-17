@@ -43,6 +43,7 @@ func SetupRoutes(ctx context.Context, logger *slog.Logger, router chi.Router) (c
 	if err := errors.Join(
 		setupIndexRoute(router, sessionStore, ns),
 		setupCounterRoute(router, sessionStore),
+		setupMonitorRoute(logger, router),
 		setupSortableRoute(router),
 	); err != nil {
 		return cleanup, fmt.Errorf("error setting up routes: %w", err)

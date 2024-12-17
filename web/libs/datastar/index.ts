@@ -1,2 +1,2 @@
-import "@starfederation/datastar/dist/bundles/datastar.js";
+import "@starfederation/datastar/dist/datastar.js";
 
