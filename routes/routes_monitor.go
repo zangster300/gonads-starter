@@ -28,6 +28,7 @@ func setupMonitorRoute(logger *slog.Logger, router chi.Router) error {
 		cpuT := time.NewTicker(time.Second)
 		defer cpuT.Stop()
 
+		sse := datastar.NewSSE(w, r)
 		for {
 			select {
 			case <-r.Context().Done():
@@ -47,7 +48,6 @@ func setupMonitorRoute(logger *slog.Logger, router chi.Router) error {
 					MemUsedPercent: fmt.Sprintf("%.2f%%", m.UsedPercent),
 				}
 
-				sse := datastar.NewSSE(w, r)
 				sse.MarshalAndMergeSignals(memStats)
 
 			case <-cpuT.C:
@@ -63,7 +63,6 @@ func setupMonitorRoute(logger *slog.Logger, router chi.Router) error {
 					CpuIdle:   fmt.Sprintf("%.2f", c[0].Idle),
 				}
 
-				sse := datastar.NewSSE(w, r)
 				sse.MarshalAndMergeSignals(cpuStats)
 			}
 		}
