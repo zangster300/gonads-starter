@@ -57,7 +57,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 								This mini application is driven by a
 								<span class="italic font-bold uppercase text-primary">single get request!</span>
 								<br/>
-								As you interact with the UI, the backend state is updated and new partial HTML fragments are sent down to the client via Server-Sent Events.  You can make simple apps or full blown SPA replacements with this pattern.  Open you dev tools and watch the network tab to see the magic happen (you will want to look for the "/todos" Network/EventStream tab).
+								As you interact with the UI, the backend state is updated and new partial HTML fragments are sent down to the client via Server-Sent Events.  You can make simple apps or full blown SPA replacements with this pattern.  Open your dev tools and watch the network tab to see the magic happen (you will want to look for the "/todos" Network/EventStream tab).
 							</div>
 						</p>
 					</div>
@@ -78,7 +78,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 									class="btn btn-lg"
 									data-on-click={ datastar.PostSSE("/api/todos/-1/toggle") }
 									data-indicator="toggleAllFetching"
-									data-attrs-disabled="toggleAllFetching"
+									data-attrs-disabled="$toggleAllFetching"
 								>
 									@icon("material-symbols:checklist")
 								</button>
@@ -116,7 +116,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 								} else {
 									<button
 										class="btn btn-xs join-item"
-										data-on-click={ fmt.Sprintf("$put('/api/todos/mode/%d')", i) }
+										data-on-click={ datastar.PutSSE("/api/todos/mode/%d", i) }
 									>
 										{ TodoViewModeStrings[i] }
 									</button>
@@ -128,7 +128,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 								<div class="tooltip" data-tip={ fmt.Sprintf("clear %d completed todos", completed) }>
 									<button
 										class="btn btn-error btn-xs join-item"
-										data-on-click="$delete('/api/todos/-1')"
+										data-on-click={ datastar.DeleteSSE("/api/todos/-1") }
 									>
 										@icon("material-symbols:delete")
 									</button>
@@ -137,7 +137,7 @@ templ TodosMVCView(mvc *TodoMVC) {
 							<div class="tooltip" data-tip="Reset list">
 								<button
 									class="btn btn-warning btn-xs join-item"
-									data-on-click="$put('/api/todos/reset')"
+									data-on-click={ datastar.PutSSE("/api/todos/reset") }
 								>
 									@icon("material-symbols:delete-sweep")
 								</button>
@@ -161,12 +161,12 @@ templ TodoInput(i int) {
 		placeholder="What needs to be done?"
 		data-bind-input
 		data-on-keydown={ fmt.Sprintf(`
-			if (evt.key !== 'Enter' || !input.value.trim().length) return;
-			sse('/api/todos/%d/edit', {method:'put'});
-			input.value = '';
-		`, i) }
+			if (evt.key !== 'Enter' || !$input.trim().length) return;
+			%s;
+			$input = '';
+		`, datastar.PutSSE("/api/todos/%d/edit",i) ) }
 		if i >= 0 {
-			data-on-click.outside:capture={ datastar.PutSSE("/api/todos/cancel") }
+			data-on-click__outside={ datastar.PutSSE("/api/todos/cancel") }
 		}
 	/>
 }
@@ -182,7 +182,7 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 		mode == TodoViewModeAll) ||
 		(mode == TodoViewModeActive && !todo.Completed) ||
 		(mode == TodoViewModeCompleted && todo.Completed) {
-		<li class="flex items-center gap-8 p-1 p-2 group" id={ fmt.Sprintf("todo%d", i) }>
+		<li class="flex items-center gap-8 p-2 group" id={ fmt.Sprintf("todo%d", i) }>
 			<label
 				id={ fmt.Sprintf("toggle%d", i) }
 				class="text-4xl cursor-pointer"
@@ -210,7 +210,7 @@ templ TodoRow(mode TodoViewMode, todo *Todo, i int, isEditing bool) {
 				data-on-click={ datastar.DeleteSSE("/api/todos/%d", i) }
 				data-testid={ fmt.Sprintf("delete_todo%d", i) }
 				data-indicator={ fetchingSignalName }
-				data-attrs-disabled={ fetchingSignalName + ".value" }
+				data-attrs-disabled={ fetchingSignalName + "" }
 			>
 				@icon("material-symbols:close")
 			</button>

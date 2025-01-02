@@ -7,7 +7,7 @@ tasks:
   # The `build:` tasks below are used together for "production" builds of your project
   build:templ:
     cmds:
-      - go run github.com/a-h/templ/cmd/templ@v0.2.793 generate -v
+      - go run github.com/a-h/templ/cmd/templ@v0.3.819 generate -v
 
   build:styles:
     cmds:
@@ -41,7 +41,7 @@ tasks:
   # The `live:` tasks below are used together for "dev" builds, and will hot-reload your entire project when there are code changes
   live:templ:
     cmds:
-      - go run github.com/a-h/templ/cmd/templ@v0.2.793 generate --watch --proxy="http://localhost:8080" --open-browser=false -v
+      - go run github.com/a-h/templ/cmd/templ@v0.3.819 generate --watch --proxy="http://localhost:8080" --open-browser=false -v
 
   live:styles:
     cmds:
@@ -71,7 +71,7 @@ tasks:
     cmds:
       - |
         go run github.com/air-verse/air@v1.52.3 \
-        --build.cmd "go run github.com/a-h/templ/cmd/templ@v0.2.793 generate --notify-proxy" \
+        --build.cmd "go run github.com/a-h/templ/cmd/templ@v0.3.819 generate --notify-proxy" \
         --build.bin "true" \
         --build.delay "100" \
         --build.exclude_dir "" \

@@ -24,16 +24,16 @@
   },
   "dependencies": {
     "lit": "^3.2.1",
-    "sortablejs": "^1.15.3"
+    "sortablejs": "^1.15.6"
   },
   "devDependencies": {
     "@types/sortablejs": "^1.15.8",
     "autoprefixer": "^10.4.20",
     "picocolors": "^1.1.1",
-    "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.14",
-    "typescript": "^5.6.3",
-    "vite": "^5.4.9",
-    "vite-plugin-dts": "^4.2.4"
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.6",
+    "vite-plugin-dts": "^4.4.0"
   }
 }

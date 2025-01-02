@@ -16,6 +16,13 @@ type SystemMonitorSignals struct {
 
 templ MonitorInitial() {
 	@layouts.Base("System Monitoring Example") {
+		<nav class="flex justify-center my-2">
+			<ul class="menu menu-vertical md:menu-horizontal bg-base-200 rounded-box">
+				<li class="hover:text-primary"><a href="/counter">Counter Example</a></li>
+				<li class="hover:text-primary"><a href="/">Todo Example</a></li>
+				<li class="hover:text-primary"><a href="/sortable">Sortable Example</a></li>
+			</ul>
+		</nav>
 		<div
 			id="container"
 			data-on-load={ datastar.GetSSE("/monitor/events") }
@@ -25,15 +32,15 @@ templ MonitorInitial() {
 			<div class="border border-primary rounded flex gap-8 p-8">
 				<div id="mem" class="flex flex-col">
 					<h1 class="text-center pb-2 text-xl">Memory</h1>
-					<p>Total: <span data-text="memTotal.value"></span></p>
-					<p>Used: <span data-text="memUsed.value"></span></p>
-					<p>Used (%): <span data-text="memUsedPercent.value"></span></p>
+					<p>Total: <span data-text="$memTotal"></span></p>
+					<p>Used: <span data-text="$memUsed"></span></p>
+					<p>Used (%): <span data-text="$memUsedPercent"></span></p>
 				</div>
 				<div id="cpu" class="flex flex-col">
 					<h1 class="text-center pb-2 text-xl">CPU</h1>
-					<p>User: <span data-text="cpuUser.value"></span></p>
-					<p>System: <span data-text="cpuSystem.value"></span></p>
-					<p>Idle: <span data-text="cpuIdle.value"></span></p>
+					<p>User: <span data-text="$cpuUser"></span></p>
+					<p>System: <span data-text="$cpuSystem"></span></p>
+					<p>Idle: <span data-text="$cpuIdle"></span></p>
 				</div>
 			</div>
 		</div>
