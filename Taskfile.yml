@@ -2,6 +2,7 @@ version: "3"
 
 env:
   STATIC_DIR: "web/static"
+  NATS_PORT: 4222
 
 tasks:
   # The `build:` tasks below are used together for "production" builds of your project
