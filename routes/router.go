@@ -5,6 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"net"
+	"os"
+	"strconv"
 	"time"
 
 	"github.com/delaneyj/toolbelt"
@@ -15,10 +18,12 @@ import (
 )
 
 func SetupRoutes(ctx context.Context, logger *slog.Logger, router chi.Router) (cleanup func() error, err error) {
-	natsPort, err := toolbelt.FreePort()
+	natsPort, err := getFreeNatsPort()
 	if err != nil {
 		return nil, fmt.Errorf("error getting free port: %w", err)
 	}
+
+	slog.Info("listening on port", slog.Int("natsPort", natsPort))
 
 	ns, err := embeddednats.New(ctx, embeddednats.WithNATSServerOptions(&natsserver.Options{
 		JetStream: true,
@@ -50,4 +55,27 @@ func SetupRoutes(ctx context.Context, logger *slog.Logger, router chi.Router) (c
 	}
 
 	return cleanup, nil
+}
+
+func getFreeNatsPort() (int, error) {
+	if p, ok := os.LookupEnv("NATS_PORT"); ok {
+		natsPort, err := strconv.Atoi(p)
+		if err != nil {
+			return 0, err
+		}
+		if isPortFree(natsPort) {
+			return natsPort, nil
+		}
+	}
+	return toolbelt.FreePort()
+}
+
+func isPortFree(port int) bool {
+	address := fmt.Sprintf(":%d", port)
+	ln, err := net.Listen("tcp", address)
+	if err != nil {
+		return false
+	}
+	_ = ln.Close()
+	return true
 }
