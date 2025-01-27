@@ -23,8 +23,6 @@ func SetupRoutes(ctx context.Context, logger *slog.Logger, router chi.Router) (c
 		return nil, fmt.Errorf("error getting free port: %w", err)
 	}
 
-	slog.Info("listening on port", slog.Int("natsPort", natsPort))
-
 	ns, err := embeddednats.New(ctx, embeddednats.WithNATSServerOptions(&natsserver.Options{
 		JetStream: true,
 		Port:      natsPort,
@@ -35,6 +33,7 @@ func SetupRoutes(ctx context.Context, logger *slog.Logger, router chi.Router) (c
 	}
 
 	ns.WaitForServer()
+	logger.Info(fmt.Sprintf("Starting NATS on port :%d", natsPort))
 
 	cleanup = func() error {
 		return errors.Join(

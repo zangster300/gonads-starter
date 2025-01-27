@@ -12,11 +12,11 @@ tasks:
 
   build:styles:
     cmds:
-      - pnpx tailwindcss -c tailwind.config.js -i web/styles/styles.css -o $STATIC_DIR/index.css
+      - pnpm exec tailwindcss -c tailwind.config.js -i web/styles/styles.css -o $STATIC_DIR/index.css
 
   build:esbuild:
     cmds:
-      - pnpx esbuild web/libs/datastar/index.ts --bundle --outdir=$STATIC_DIR
+      - pnpm exec esbuild web/libs/datastar/index.ts --bundle --outdir=$STATIC_DIR
 
   build:lit-html:
     cmds:
@@ -46,11 +46,11 @@ tasks:
 
   live:styles:
     cmds:
-      - pnpx tailwindcss -c tailwind.config.js -i web/styles/styles.css -o $STATIC_DIR/index.css --watch
+      - pnpm exec tailwindcss -c tailwind.config.js -i web/styles/styles.css -o $STATIC_DIR/index.css --watch
 
   live:esbuild:
     cmds:
-      - pnpx esbuild web/libs/datastar/index.ts --sourcemap --bundle --outdir=$STATIC_DIR --watch
+      - pnpm exec esbuild web/libs/datastar/index.ts --sourcemap --bundle --outdir=$STATIC_DIR --watch
 
   live:lit-html:
     cmds:

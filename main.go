@@ -24,7 +24,7 @@ func main() {
 		}
 		return "8080"
 	}
-	logger.Info(fmt.Sprintf("Starting Server 0.0.0.0:" + getPort()))
+	logger.Info("Starting Server on port :" + getPort())
 	defer logger.Info("Stopping Server")
 
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
