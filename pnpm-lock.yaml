@@ -30,8 +30,8 @@ importers:
   web/libs/datastar:
     dependencies:
       '@starfederation/datastar':
-        specifier: 1.0.0-beta.1
-        version: 1.0.0-beta.1
+        specifier: 1.0.0-beta.6
+        version: 1.0.0-beta.6
 
   web/libs/lit-html:
     dependencies:
@@ -423,8 +423,8 @@ packages:
   '@rushstack/ts-command-line@4.23.2':
     resolution: {integrity: sha512-JJ7XZX5K3ThBBva38aomgsPv1L7FV6XmSOcR6HtM7HDFZJkepqT65imw26h9ggGqMjsY0R9jcl30tzKcVj9aOQ==}
 
-  '@starfederation/datastar@1.0.0-beta.1':
-    resolution: {integrity: sha512-BdvNoLHbc+SbufdtaIwVhCBnFHxPn3fD2f0cpXCsGLVwtUiLDTDQ06vRYVPGgjKIJv1wU/OuN0+tvq/HCgemUg==}
+  '@starfederation/datastar@1.0.0-beta.6':
+    resolution: {integrity: sha512-8rkjnaoFhfZztoZaRmTzef5HxwlDMkL4v3R2aME3TDZPyZxlysIfvPAVTzOXNYB/Sh1mKqqpvSYN/3iUB/UDOg==}
 
   '@types/argparse@1.0.38':
     resolution: {integrity: sha512-ebDJ9b0e702Yr7pWgB0jzm+CX4Srzz8RcXtLJDJB+BSccqMa36uyH/zUsSYao5+BD1ytv3k3rPYCq4mAE1hsXA==}
@@ -1440,7 +1440,7 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
-  '@starfederation/datastar@1.0.0-beta.1': {}
+  '@starfederation/datastar@1.0.0-beta.6': {}
 
   '@types/argparse@1.0.38': {}
 
